@@ -1,4 +1,6 @@
 #include <iostream>
+#include <ctime>
+using namespace std;
 
 void PrintIntroduction()
 {
@@ -21,17 +23,30 @@ void PrintIntroduction()
              `-._,-'   `-._______,-'   `-._,-'
    )" << '\n';
 
-    std::cout << "The Wendigo has been unleashed into this world! Your Mission: return the beast from whence it came!\n";
-    std::cout << "You need to decipher the ancient locks in order to retrieve the artefacts needed to return the beast\n\n";
+    std::cout << "\n\nThe Wendigo has been unleashed into this world! Your Mission: return the beast from whence it came!\n";
+    std::cout << "You need to decipher the ancient locks in order to retrieve the artefacts needed to return the beast.\n";
 }
 
-void PlayGame()
+void PrintLevelFlavourText(int Difficulty, string CurrentArtifact, string CurrentLocation)
 {
-    PrintIntroduction();
+    std::cout << "\nYou need to retrieve the " << CurrentArtifact << " from " << CurrentLocation << ". Current Level: " << Difficulty << "\n\n";
+}
 
-    const int CodeA = 2;
-    const int CodeB = 3;
-    const int CodeC = 4;
+bool PlayGame(int Difficulty, string CurrentArtifact, string CurrentLocation)
+{
+    if (Difficulty == 1)
+    {
+        PrintIntroduction();
+        PrintLevelFlavourText(Difficulty, CurrentArtifact, CurrentLocation);
+    }
+    else
+    {
+        PrintLevelFlavourText(Difficulty, CurrentArtifact, CurrentLocation);
+    }
+
+    const int CodeA = rand() % Difficulty + Difficulty;
+    const int CodeB = rand() % Difficulty + Difficulty;
+    const int CodeC = rand() % Difficulty + Difficulty;
 
     int CodeSum = CodeA + CodeB + CodeC;
     int CodeProduct = CodeA * CodeB * CodeC;
@@ -52,16 +67,67 @@ void PlayGame()
     // Check if the player's guess is correct
     if (GuessSum == CodeSum && GuessProduct == CodeProduct)
     {
-        std::cout << "\nYou Win!";
+        std::cout << "\n*** Nice going! That is the " << CurrentArtifact << " safely recovered! Let's get the next one ***";
+        return true;
     }
     else
     {
-        std::cout << "\nYou Lose!";
+        std::cout << "\n*** The ancient lock whirls in confusion, it seems you entered the code. Try Again! ***\n\n";
+        return false;
     }
 }
 
 int main()
 {
-    PlayGame();
+    srand(time(NULL));
+
+    string const ARTIFACTNAMES[]
+    {
+        "Enigmatic Book",
+        "Thunder Crown",
+        "Truth Canopic Chest",
+        "Life Cloak",
+        "Azure Statue",
+        "Statue of Doom",
+        "Urn of Darkness",
+        "Stone of Chaos",
+        "Gem of Passion",
+        "Fleece of Benediction"
+    };
+
+    string const PLACENAMES[]
+    {
+        "Bearcliff",
+        "Pinefort",
+        "Crystalmount",
+        "Madgrove",
+        "Farwell",
+        "Rosefort",
+        "Stillchill",
+        "Goldcall",
+        "Sandborn",
+        "Frosthaven"
+    };
+    
+    int Difficulty = 1;
+    int MaxDifficulty = 10;
+
+    while (Difficulty <= MaxDifficulty)
+    {
+        string CurrentArtifact = ARTIFACTNAMES[Difficulty - 1];
+        string CurrentLocation = PLACENAMES[Difficulty - 1];
+
+        bool bLevelComplete = PlayGame(Difficulty, CurrentArtifact, CurrentLocation);
+
+        std::cin.clear(); // clears any errors
+        std::cin.ignore(); // discards the buffer
+
+        if (bLevelComplete)
+        {
+            ++Difficulty;
+        }
+    }
+
+    std::cout << "\nYou have returned The Wendigo!\n\n";
     return 0;
 }
