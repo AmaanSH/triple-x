@@ -81,7 +81,7 @@ int main()
 {
     srand(time(NULL));
 
-    string const ARTIFACTNAMES[]
+    const string ARTIFACTNAMES[]
     {
         "Enigmatic Book",
         "Thunder Crown",
@@ -95,7 +95,7 @@ int main()
         "Fleece of Benediction"
     };
 
-    string const PLACENAMES[]
+    const string PLACENAMES[]
     {
         "Bearcliff",
         "Pinefort",
